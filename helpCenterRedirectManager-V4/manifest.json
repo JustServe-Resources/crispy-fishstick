@@ -1,0 +1,21 @@
+{
+  "name": "Help Center Redirect Manager",
+  "author": {
+    "name": "Jonathan Zollinger",
+    "email": "jonathan.zollinger@churchofjesuschrist.org",
+    "url": "https://justserve.zendesk.com/api/v2/users/28689536969627.json"
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": {
+    "support": {
+      "nav_bar": {
+        "url": "assets/index.html",
+        "flexible": false,
+        "icon": "assets/icon_nav_bar.svg"
+      }
+    }
+  },
+  "version": "1.0.1",
+  "frameworkVersion": "2.0"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Incident Metadata Prefill",
+  "author": {
+    "name": "Jonathan Zollinger",
+    "email": "jonathan.zollinger@churchofjesuschrist.org",
+    "url": "https://justserve.zendesk.com/api/v2/users/28689536969627.json"
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": {
+    "support": {
+      "ticket_sidebar": {
+        "url": "assets/index.html",
+        "flexible": true
+      }
+    }
+  },
+  "version": "1.0.1",
+  "frameworkVersion": "2.0"
+}

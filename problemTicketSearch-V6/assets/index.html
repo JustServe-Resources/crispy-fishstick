@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1"
+    />
+
+    <script>
+      window.onerror = function(message, source, lineno, colno, error) {
+        console.log({error});
+        window.parent.postMessage({
+          type: 'iframe-error',
+          error: error?.toString(),
+          stack: error?.stack,
+          message,
+          source,
+          lineno,
+          colno
+        }, '*');
+        return false;
+      };
+
+      // Also catch unhandled promise rejections
+      window.addEventListener('unhandledrejection', function(event) {
+        window.parent.postMessage({
+          type: 'iframe-error',
+          error: event.reason?.toString(),
+          stack: event.reason?.stack
+        }, '*');
+      });
+    </script>
+
+    <link rel="stylesheet" href="main.css">
+
+    <title>Zendesk App Builder</title>
+    <script type="importmap">
+      {"imports":{"react":"https://static.zdassets.com/app_builder/react@18.js","react-dom":"https://static.zdassets.com/app_builder/react-dom@18.js","react-dom/client":"https://static.zdassets.com/app_builder/react-dom@18/client.js","styled-components":"https://static.zdassets.com/app_builder/styled-components@6.x.js","pdfjs-dist":"https://static.zdassets.com/app_builder/pdfjs-dist@4.10.38.js","tesseract.js":"https://static.zdassets.com/app_builder/tesseract.js@6.0.0.js","@zendeskgarden/react-theming":"https://static.zdassets.com/app_builder/@zendeskgarden/react-theming@9.x.js","@zendeskgarden/react-buttons":"https://static.zdassets.com/app_builder/@zendeskgarden/react-buttons@9.x.js","@zendeskgarden/react-grid":"https://static.zdassets.com/app_builder/@zendeskgarden/react-grid@9.x.js","@zendeskgarden/react-forms":"https://static.zdassets.com/app_builder/@zendeskgarden/react-forms@9.x.js","@zendeskgarden/react-tables":"https://static.zdassets.com/app_builder/@zendeskgarden/react-tables@9.x.js","@zendeskgarden/react-typography":"https://static.zdassets.com/app_builder/@zendeskgarden/react-typography@9.x.js","@zendeskgarden/react-loaders":"https://static.zdassets.com/app_builder/@zendeskgarden/react-loaders@9.x.js","@zendeskgarden/react-tags":"https://static.zdassets.com/app_builder/@zendeskgarden/react-tags@9.x.js","@zendeskgarden/react-tabs":"https://static.zdassets.com/app_builder/@zendeskgarden/react-tabs@9.x.js","@zendeskgarden/react-accordions":"https://static.zdassets.com/app_builder/@zendeskgarden/react-accordions@9.x.js","@zendeskgarden/react-tooltips":"https://static.zdassets.com/app_builder/@zendeskgarden/react-tooltips@9.x.js","@zendeskgarden/react-modals":"https://static.zdassets.com/app_builder/@zendeskgarden/react-modals@9.x.js","@zendeskgarden/react-notifications":"https://static.zdassets.com/app_builder/@zendeskgarden/react-notifications@9.x.js","@zendeskgarden/react-pagination":"https://static.zdassets.com/app_builder/@zendeskgarden/react-pagination@9.x.js","@zendeskgarden/react-dropdowns":"https://static.zdassets.com/app_builder/@zendeskgarden/react-dropdowns@9.x.js","recharts":"https://static.zdassets.com/app_builder/recharts@3.2.1.js"}}
+    </script>
+    <script
+      type="text/javascript"
+      src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"
+    ></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/javascript">
+      window.zafClient = ZAFClient.init();
+
+      window?.zafClient?.invoke('resize', { width: '100%', height: '550px' });
+    </script>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
+
