@@ -1,0 +1,12 @@
+{
+  "name": "crispy-fishstick-root",
+  "version": "1.0.0",
+  "description": "Root project for Zendesk plugins",
+  "private": true,
+  "devDependencies": {
+    "@zendesk/zcli": "1.0.0-beta.46"
+  },
+  "scripts": {
+    "zcli": "zcli"
+  }
+}
