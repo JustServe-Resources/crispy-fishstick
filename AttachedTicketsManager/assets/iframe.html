@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html class="scrollbar-container">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="./style.css">
+  <!--   See Using Zendesk Garden:
+    https://developer.zendesk.com/apps/docs/developer-guide/setup#using-zendesk-garden
+    https://garden.zendesk.com/css-components/bedrock/
+    https://garden.zendesk.com/css-components/utilities/typography/
+   -->
+</head>
+<body class="body">
+  <section class="header-section">
+    <!-- put ticket subject in the header -->
+    <h2 class="u-semibold u-fs-xl">Ticket Information</h2>
+    <div class="related-ticket-lists">
+      <div id="test-run-container-btn" class="related-ticket-ls">
+        <p>Test Runs</p>
+      </div>
+      <div id="regressions-container-btn" class="related-ticket-ls">
+        <p>Regressions</p>
+      </div>
+      <div id="incidents-container-btn" class="related-ticket-ls">
+        <p>Incidents</p>
+      </div>
+    </div>
+  </section>
+  
+  <div class="body-container">
+    
+    <div class="linked-tickets-display-container">
+      <section class="incidents-container list-container" hidden></section>
+      <section class="test-runs-container list-container" id="testRunsBody">
+
+        <div style="text-align: center;">
+          <h3 style="padding-bottom: 15px">Track Recent Test Runs</h3>
+          <div class="timeline" id="timelineContainer">
+            <div class="info-hover-box" id="infoHoverBox">
+              <p id="hover-title">Testruns: 1</p>
+              <p id="hover-content"></p>
+            </div>
+            <div class="positive-quantity-container xy-axis-container" id="positiveQuantityContainer"></div>
+            <div class="positive-data-container data-container" id="positiveDataContainer"></div>
+            <div class="quantity-intersection xy-axis-container">0</div>
+            <div class="time-container xy-axis-container" id="timeContainer"></div>
+            <div class="negative-data-container data-container" id="negativeDataContainer"></div>
+            <div class="negative-quantity-container xy-axis-container" id="negativeQuantityContainer"></div>
+          </div>
+        </div>
+      </section>
+      <section class="regressions-container list-container" hidden></section>
+    </div>
+    
+
+
+
+
+    
+    <div class="ticket-fields-container">
+
+    </div>
+  </div>
+  <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+  <script type="application/javascript" src="./scripts/ManageUiToolbox.js"></script>
+  <script type="application/javascript" src="./scripts/Ticket.js"></script>
+  <script type="application/javascript" src="./scripts/TestRunsSection.js"></script>
+  <script type="application/javascript" src="./scripts/Graph.js"></script>
+  <script type="application/javascript" src="./scripts/index.js"></script>
+</body>
+</html>
+
+
+<!-- keep this in mind 
+High Volume API add-on: For significantly higher limits, Zendesk offers an add-on that increases the request limit to 2500 requests per minute 
+-->
