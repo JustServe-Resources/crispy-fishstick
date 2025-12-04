@@ -4,9 +4,15 @@
   "description": "Root project for Zendesk plugins",
   "private": true,
   "devDependencies": {
-    "@zendesk/zcli": "1.0.0-beta.46"
+    "@zendesk/zcli": "1.0.0-beta.46",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5"
   },
   "scripts": {
-    "zcli": "zcli"
+    "zcli": "zcli",
+    "lint": "eslint . --ext .js,.jsx --ignore-pattern node_modules --ignore-pattern build --ignore-pattern .gradle",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --write \"**/*.{js,jsx,json,css,md}\" --ignore-path .gitignore",
+    "test": "node tests/readme-validation.js"
   }
 }
