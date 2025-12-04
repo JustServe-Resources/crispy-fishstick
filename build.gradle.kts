@@ -42,4 +42,20 @@ subprojects {
         args.set(listOf("apps:validate", "."))
         workingDir.set(project.projectDir)
     }
+
+    tasks.register<com.github.gradle.node.npm.task.NpxTask>("lint") {
+        group = "verification"
+        description = "Runs ESLint on JavaScript and JSX files."
+        command.set("eslint")
+        args.set(listOf("assets", "components", "--fix"))
+        workingDir.set(project.projectDir)
+    }
+
+    tasks.register<com.github.gradle.node.npm.task.NpxTask>("format") {
+        group = "formatting"
+        description = "Formats code with Prettier."
+        command.set("prettier")
+        args.set(listOf("--write", "assets", "components"))
+        workingDir.set(project.projectDir)
+    }
 }
