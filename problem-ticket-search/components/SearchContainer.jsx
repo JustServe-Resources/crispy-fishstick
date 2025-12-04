@@ -28,8 +28,8 @@ export const SearchContainer = () => {
         data: {
           query: `type:ticket ticket_type:problem ${searchQuery}`,
           sort_by: 'created_at',
-          sort_order: 'desc'
-        }
+          sort_order: 'desc',
+        },
       });
 
       setResults(response.results || []);

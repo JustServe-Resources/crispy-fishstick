@@ -13,19 +13,11 @@ export const ResultsTable = ({ results, loading, hasSearched }) => {
   }
 
   if (!hasSearched) {
-    return (
-      <EmptyState>
-        Enter a search term to find problem tickets
-      </EmptyState>
-    );
+    return <EmptyState>Enter a search term to find problem tickets</EmptyState>;
   }
 
   if (results.length === 0) {
-    return (
-      <EmptyState>
-        No problem tickets found
-      </EmptyState>
-    );
+    return <EmptyState>No problem tickets found</EmptyState>;
   }
 
   const openTicket = (ticketId) => {
