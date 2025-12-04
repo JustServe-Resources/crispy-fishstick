@@ -2,7 +2,7 @@
 
 /**
  * README Validation Tests
- * 
+ *
  * This test suite validates that all code block commands in README.md work correctly.
  * It only tests that instructions users should follow actually execute successfully.
  */

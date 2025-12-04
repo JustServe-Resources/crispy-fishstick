@@ -9,8 +9,8 @@ const App = () => {
   const [base, setBase] = useState(initialColorScheme);
 
   useEffect(() => {
-    window.zafClient.get('colorScheme').then(data => setBase(data.colorScheme));
-    window.zafClient.on('colorScheme.changed', colorScheme => setBase(colorScheme));
+    window.zafClient.get('colorScheme').then((data) => setBase(data.colorScheme));
+    window.zafClient.on('colorScheme.changed', (colorScheme) => setBase(colorScheme));
     window.zafClient.invoke('resize', { width: '700px', height: '600px' });
   }, []);
 

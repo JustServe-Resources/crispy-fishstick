@@ -29,6 +29,7 @@ npm install
 ```
 
 This will install:
+
 - **@zendesk/zcli** – Zendesk CLI for plugin validation and deployment
 - **ESLint** – JavaScript linter for code quality
 - **Prettier** – Code formatter
