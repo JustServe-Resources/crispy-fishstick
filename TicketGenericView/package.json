@@ -5,28 +5,30 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "watch": "webpack --watch --config webpack.config.js",
-    "start": "webpack serve --config webpack.config.js"
+    "start": "concurrently \"zcli apps:server dist\" \"webpack --watch\"",
+    "dev": "webpack serve --mode development"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "styled-components": "^6.0.0",
-    "@zendeskgarden/react-buttons": "^9.0.0",
-    "@zendeskgarden/react-dropdowns": "^9.0.0",
     "@zendeskgarden/react-accordions": "^9.0.0",
-    "@zendeskgarden/react-tags": "^9.0.0",
+    "@zendeskgarden/react-buttons": "^9.0.0",
     "@zendeskgarden/react-chrome": "^9.0.0",
+    "@zendeskgarden/react-dropdowns": "^9.0.0",
     "@zendeskgarden/react-loaders": "^9.0.0",
     "@zendeskgarden/react-notifications": "^9.0.0",
     "@zendeskgarden/react-tables": "^9.0.0",
+    "@zendeskgarden/react-tags": "^9.0.0",
     "@zendeskgarden/react-theming": "^9.0.0",
-    "@zendeskgarden/react-typography": "^9.0.0"
+    "@zendeskgarden/react-typography": "^9.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "styled-components": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.0",
     "@babel/preset-env": "^7.22.0",
     "@babel/preset-react": "^7.22.0",
     "babel-loader": "^9.1.2",
+    "concurrently": "^9.2.1",
     "css-loader": "^6.8.1",
     "html-webpack-plugin": "^5.5.3",
     "style-loader": "^3.3.3",

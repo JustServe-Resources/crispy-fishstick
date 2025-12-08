@@ -9,6 +9,7 @@ module.exports = {
     filename: 'main.js',
     clean: true
   },
+  watch: true,
   module: {
     rules: [
       {
