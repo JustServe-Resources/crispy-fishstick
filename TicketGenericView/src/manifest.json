@@ -1,0 +1,19 @@
+{
+  "name": "Generic Ticket View",
+  "author": {
+    "name": "James Talbot",
+    "email": "banrabas.sacket@gmail.com"
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": {
+    "support": {
+      "ticket_sidebar": {
+        "url": "assets/index.html",
+        "flexible": true
+      }
+    }
+  },
+  "version": "1.0",
+  "frameworkVersion": "2.0"
+}
