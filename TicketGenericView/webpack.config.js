@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -9,7 +10,6 @@ module.exports = {
     filename: 'main.js',
     clean: true
   },
-  watch: true,
   module: {
     rules: [
       {
@@ -32,6 +32,11 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: 'src/assets/mock.js', to: path.join(__dirname, 'dist/assets') },
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: './src/assets/index.html',
       filename: './index.html'
