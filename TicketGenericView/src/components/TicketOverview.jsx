@@ -30,6 +30,8 @@ import {
   ConversationLink,
   InternalNotesSection
 } from '../styles/TicketOverviewStyles';
+import SetTicketType from './editFields/setTicketType';
+import SetTicketAssignee from './editFields/setTicketAssignee';
 
 export const TicketOverview = ({ ticketData, ticketFields, loading, onRefresh }) => {
   const [ticket, setTicket] = useState(null);
@@ -55,6 +57,9 @@ export const TicketOverview = ({ ticketData, ticketFields, loading, onRefresh })
   
   const [editingType, setEditingType] = useState(false);
   const [editTypeValue, setEditTypeValue] = useState('');
+
+  const [editingTask, setEditingTask]=useState(false);
+  const [editingTaskValue, setEditingTaskValue]=useState('');
   
   const [editingAssignee, setEditingAssignee] = useState(false);
   const [editAssigneeValue, setEditAssigneeValue] = useState('');
@@ -531,6 +536,7 @@ export const TicketOverview = ({ ticketData, ticketFields, loading, onRefresh })
                 </>
               ) : (
                 <InlineEditContainer>
+                  <SetTicketAssignee />
                   <Field>
                     <Label>Assignee</Label>
                     <Input
@@ -573,6 +579,53 @@ export const TicketOverview = ({ ticketData, ticketFields, loading, onRefresh })
               </TagContainer>
             </SidebarFieldRow>
           )}
+
+          <SidebarFieldRow>
+            {/* this should only be displayed if the task type is set to task */}
+            {!editingTask ? (
+              // we could make this part it's own component as well, which we just feed in the specific text to display, and the variable to set
+              <>
+                <FieldLabel>Task</FieldLabel>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <FieldValue style={{ fontStyle: pendingChanges.type ? 'italic' : 'normal' }}>
+                    {displayType}
+                  </FieldValue>
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      setEditingTaskValue(displayType);
+                      setEditingTask(true);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <InlineEditContainer>
+                <SetTicketType editTypeValue={editTypeValue} setEditTypeValue={setEditTypeValue} />
+                {/* we could make this it's own component, and reuse it in basically all of the edit sections */}
+                <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+                  <Button
+                    size="small"
+                    isPrimary
+                    onClick={() => {
+                      handleApplyChange('type', editTypeValue);
+                      setTicketType(false);
+                    }}
+                  >
+                    Apply
+                  </Button>
+                  <Button
+                    size="small"
+                    onClick={() => setEditingType(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </InlineEditContainer>
+            )}
+          </SidebarFieldRow>
         </SidebarColumn>
       </GridContainer>
 
