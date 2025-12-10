@@ -1,0 +1,161 @@
+Feature Policy: Skipping unsupported feature name “autoplay”. vendor.d67e33026dea18d968650.js line 248 > srcScript:2068:3318
+Feature Policy: Skipping unsupported feature name “midi”. vendor.d67e33026dea18d968650.js line 248 > srcScript:2068:3318
+Feature Policy: Skipping unsupported feature name “encrypted-media”. vendor.d67e33026dea18d968650.js line 248 > srcScript:2068:3318
+Feature Policy: Skipping unsupported feature name “clipboard-write”. vendor.d67e33026dea18d968650.js line 248 > srcScript:2068:3318
+Feature Policy: Skipping unsupported feature name “autoplay”. vendor.d67e33026dea18d968650.js line 248 > srcScript:1950:12340
+Feature Policy: Skipping unsupported feature name “midi”. vendor.d67e33026dea18d968650.js line 248 > srcScript:1950:12340
+Feature Policy: Skipping unsupported feature name “encrypted-media”. vendor.d67e33026dea18d968650.js line 248 > srcScript:1950:12340
+Feature Policy: Skipping unsupported feature name “clipboard-write”. vendor.d67e33026dea18d968650.js line 248 > srcScript:1950:12340
+Feature Policy: Skipping unsupported feature name “autoplay”. vendor.d67e33026dea18d968650.js line 248 > srcScript:2068:3318
+Feature Policy: Skipping unsupported feature name “midi”. vendor.d67e33026dea18d968650.js line 248 > srcScript:2068:3318
+Feature Policy: Skipping unsupported feature name “encrypted-media”. vendor.d67e33026dea18d968650.js line 248 > srcScript:2068:3318
+Feature Policy: Skipping unsupported feature name “clipboard-write”. vendor.d67e33026dea18d968650.js line 248 > srcScript:2068:3318
+Feature Policy: Skipping unsupported feature name “autoplay”. vendor.d67e33026dea18d968650.js line 248 > srcScript:1950:12340
+Feature Policy: Skipping unsupported feature name “midi”. vendor.d67e33026dea18d968650.js line 248 > srcScript:1950:12340
+Feature Policy: Skipping unsupported feature name “encrypted-media”. vendor.d67e33026dea18d968650.js line 248 > srcScript:1950:12340
+Feature Policy: Skipping unsupported feature name “clipboard-write”. vendor.d67e33026dea18d968650.js line 248 > srcScript:1950:12340
+[vite] connecting... client:789:9
+[vite] connecting... client:789:9
+The Components object is deprecated. It will soon be removed. localhost:3000
+The Components object is deprecated. It will soon be removed. localhost:3000
+[vite] connected. 2 client:912:15
+Uncaught ReferenceError: lastUpdatedAt is not defined
+    TicketOverview TicketOverview.jsx:109
+    React 11
+    workLoop scheduler.development.js:266
+    flushWork scheduler.development.js:239
+    performWorkUntilDeadline scheduler.development.js:533
+    js scheduler.development.js:571
+    js scheduler.development.js:633
+    __require chunk-EQCVQC35.js:9
+    js index.js:6
+    __require chunk-EQCVQC35.js:9
+    React 2
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    <anonymous> react-dom_client.js:38
+TicketOverview.jsx:109:26
+Uncaught ReferenceError: lastUpdatedAt is not defined
+    TicketOverview TicketOverview.jsx:109
+    React 12
+    workLoop scheduler.development.js:266
+    flushWork scheduler.development.js:239
+    performWorkUntilDeadline scheduler.development.js:533
+    js scheduler.development.js:571
+    js scheduler.development.js:633
+    __require chunk-EQCVQC35.js:9
+    js index.js:6
+    __require chunk-EQCVQC35.js:9
+    React 2
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    <anonymous> react-dom_client.js:38
+TicketOverview.jsx:109:26
+The above error occurred in the <TicketOverview> component:
+
+TicketOverview@http://localhost:3000/components/TicketOverview.jsx?t=1765328473035:62:39
+TicketSideBar
+Suspense
+TranslationProvider@http://localhost:3000/app/contexts/TranslationProvider.jsx:23:36
+ot@http://localhost:3000/@fs/C:/Users/jonathanzollinger/github/JustServe-Resources/crispy-fishstick/generic-ticket-view-v2/node_modules/.vite/deps/chunk-7ACR2OUY.js?v=096c837a:1224:32
+ThemeProvider@http://localhost:3000/@fs/C:/Users/jonathanzollinger/github/JustServe-Resources/crispy-fishstick/generic-ticket-view-v2/node_modules/.vite/deps/chunk-HDZGFNVF.js?v=096c837a:1889:7
+App@http://localhost:3000/app/App.jsx?t=1765328473035:33:20
+ClientProvider@http://localhost:3000/app/contexts/ClientProvider.jsx:20:31
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries. chunk-VIJJTZRL.js:14080:23
+Uncaught ReferenceError: lastUpdatedAt is not defined
+    TicketOverview TicketOverview.jsx:109
+    React 9
+    workLoop scheduler.development.js:266
+    flushWork scheduler.development.js:239
+    performWorkUntilDeadline scheduler.development.js:533
+    js scheduler.development.js:571
+    js scheduler.development.js:633
+    __require chunk-EQCVQC35.js:9
+    js index.js:6
+    __require chunk-EQCVQC35.js:9
+    React 2
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    <anonymous> react-dom_client.js:38
+TicketOverview.jsx:109:26
+Uncaught ReferenceError: lastUpdatedAt is not defined
+    TicketOverview TicketOverview.jsx:109
+    React 11
+    workLoop scheduler.development.js:266
+    flushWork scheduler.development.js:239
+    performWorkUntilDeadline scheduler.development.js:533
+    js scheduler.development.js:571
+    js scheduler.development.js:633
+    __require chunk-EQCVQC35.js:9
+    js index.js:6
+    __require chunk-EQCVQC35.js:9
+    React 2
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    <anonymous> react-dom_client.js:38
+TicketOverview.jsx:109:26
+Uncaught ReferenceError: lastUpdatedAt is not defined
+    TicketOverview TicketOverview.jsx:109
+    React 12
+    workLoop scheduler.development.js:266
+    flushWork scheduler.development.js:239
+    performWorkUntilDeadline scheduler.development.js:533
+    js scheduler.development.js:571
+    js scheduler.development.js:633
+    __require chunk-EQCVQC35.js:9
+    js index.js:6
+    __require chunk-EQCVQC35.js:9
+    React 2
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    <anonymous> react-dom_client.js:38
+TicketOverview.jsx:109:26
+The above error occurred in the <TicketOverview> component:
+
+TicketOverview@http://localhost:3000/components/TicketOverview.jsx?t=1765328473035:62:39
+TicketSideBar
+Suspense
+TranslationProvider@http://localhost:3000/app/contexts/TranslationProvider.jsx:23:36
+ot@http://localhost:3000/@fs/C:/Users/jonathanzollinger/github/JustServe-Resources/crispy-fishstick/generic-ticket-view-v2/node_modules/.vite/deps/chunk-7ACR2OUY.js?v=096c837a:1224:32
+ThemeProvider@http://localhost:3000/@fs/C:/Users/jonathanzollinger/github/JustServe-Resources/crispy-fishstick/generic-ticket-view-v2/node_modules/.vite/deps/chunk-HDZGFNVF.js?v=096c837a:1889:7
+App@http://localhost:3000/app/App.jsx?t=1765328473035:33:20
+ClientProvider@http://localhost:3000/app/contexts/ClientProvider.jsx:20:31
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries. chunk-VIJJTZRL.js:14080:23
+Uncaught ReferenceError: lastUpdatedAt is not defined
+    TicketOverview TicketOverview.jsx:109
+    React 9
+    workLoop scheduler.development.js:266
+    flushWork scheduler.development.js:239
+    performWorkUntilDeadline scheduler.development.js:533
+    js scheduler.development.js:571
+    js scheduler.development.js:633
+    __require chunk-EQCVQC35.js:9
+    js index.js:6
+    __require chunk-EQCVQC35.js:9
+    React 2
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    js React
+    __require chunk-EQCVQC35.js:9
+    <anonymous> react-dom_client.js:38
+TicketOverview.jsx:109:26
