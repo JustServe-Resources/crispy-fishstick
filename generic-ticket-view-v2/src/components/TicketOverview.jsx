@@ -10,7 +10,6 @@ import MarkdownRenderer from './MarkdownRenderer';
 import KnowledgeGapSelector from './KnowledgeGapSelector';
 
 const INTERNAL_NOTES_FIELD_ID = 37453127421979;
-const TASK_FIELD_ID = 38720689571483;
 const KNOWLEDGE_GAP_FIELD_ID = 38622750189851;
 const FORM_ID_QUESTION = 40371394736027;
 const FORM_ID_TASK = 40371906157979;
@@ -69,6 +68,7 @@ const TicketOverview = () => {
   const [pendingChanges, setPendingChanges] = useState({});
   const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [tasks, setTasks] = useState([]);
+  const [ticketFields, setTicketFields] = useState([]);
 
   useEffect(() => {
     const zafClient = window.zafClient || window.ZAFClient.init();
@@ -76,17 +76,18 @@ const TicketOverview = () => {
     zafClient.invoke('resize', { width: '100%', height: '600px' });
 
     // Fetch standard fields and relevant custom fields
-    zafClient.get([
-      'ticket',
-      `ticket.customField:custom_field_${INTERNAL_NOTES_FIELD_ID}`,
-      `ticket.customField:custom_field_${KNOWLEDGE_GAP_FIELD_ID}`
-    ]).then((data) => {
-      console.log('ZAF Fetch Result:', JSON.stringify(data, null, 2));
+    zafClient.get(['ticket', 'ticketFields']).then((data) => {
+      // Store ticket fields for possible usage in dropdowns
+      if (data.ticketFields) {
+        setTicketFields(data.ticketFields);
+      }
+
+      const ticketData = data.ticket; // Use the ticket object directly
       setTicket({
-        ...data.ticket,
+        ...ticketData,
         custom_fields: {
-          [INTERNAL_NOTES_FIELD_ID]: data[`ticket.customField:custom_field_${INTERNAL_NOTES_FIELD_ID}`],
-          [KNOWLEDGE_GAP_FIELD_ID]: data[`ticket.customField:custom_field_${KNOWLEDGE_GAP_FIELD_ID}`]
+          [INTERNAL_NOTES_FIELD_ID]: (ticketData.custom_fields || []).find(cf => cf.id === INTERNAL_NOTES_FIELD_ID)?.value,
+          [KNOWLEDGE_GAP_FIELD_ID]: (ticketData.custom_fields || []).find(cf => cf.id === KNOWLEDGE_GAP_FIELD_ID)?.value
         }
       });
     });
@@ -176,7 +177,6 @@ const TicketOverview = () => {
         if (newFormId) {
           setPendingChanges(current => ({ ...current, ticket_form_id: newFormId }));
           updatedTicket.ticket_form_id = newFormId;
-          console.log(`Switched to form ${newFormId} for type ${value}`);
         }
       }
       return updatedTicket;
@@ -265,9 +265,6 @@ const TicketOverview = () => {
 
   const internalNotes = ticket.custom_fields?.[INTERNAL_NOTES_FIELD_ID] || '';
   const currentType = pendingChanges.type !== undefined ? pendingChanges.type : (ticket.type || '');
-  const knowledgeGapValue = pendingChanges[`custom_field_${KNOWLEDGE_GAP_FIELD_ID}`] !== undefined
-    ? pendingChanges[`custom_field_${KNOWLEDGE_GAP_FIELD_ID}`]
-    : (ticket.custom_fields?.[KNOWLEDGE_GAP_FIELD_ID] || '');
 
   return (
     <Container>
@@ -347,7 +344,7 @@ const TicketOverview = () => {
                 <KnowledgeGapSelector
                   client={client}
                   value={ticket[`custom_field_${KNOWLEDGE_GAP_FIELD_ID}`]}
-                  onChange={(val) => handleFieldChange(KNOWLEDGE_GAP_FIELD_ID, val)}
+                  onChange={(val) => handleFieldChange(`custom_field_${KNOWLEDGE_GAP_FIELD_ID}`, val)}
                   onRecordSelect={(record) => {
                     if (record && record.custom_object_fields) {
                       const { kg_user_type, knowledge_gap_notes } = record.custom_object_fields;
@@ -363,6 +360,7 @@ const TicketOverview = () => {
                       }
                     }
                   }}
+                  ticketFields={ticketFields}
                   disabled={isStale}
                 />
               )}
