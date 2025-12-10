@@ -7,9 +7,11 @@ import { Button } from '@zendeskgarden/react-buttons';
 import { Tag } from '@zendeskgarden/react-tags';
 import { Accordion } from '@zendeskgarden/react-accordions';
 import MarkdownRenderer from './MarkdownRenderer';
+import KnowledgeGapSelector from './KnowledgeGapSelector';
 
 const INTERNAL_NOTES_FIELD_ID = 37453127421979;
 const TASK_FIELD_ID = 38720689571483;
+const KNOWLEDGE_GAP_FIELD_ID = 38622750189851;
 const FORM_ID_TASK = 40371906157979;
 
 const Container = styled.div`
@@ -61,21 +63,25 @@ const TicketOverview = () => {
     setClient(zafClient);
     zafClient.invoke('resize', { width: '100%', height: '600px' });
 
-    zafClient.get(['ticket', `ticket.customField:custom_field_${INTERNAL_NOTES_FIELD_ID}`]).then((data) => {
+    // Fetch standard fields and relevant custom fields
+    zafClient.get([
+      'ticket',
+      `ticket.customField:custom_field_${INTERNAL_NOTES_FIELD_ID}`,
+      `ticket.customField:custom_field_${KNOWLEDGE_GAP_FIELD_ID}`
+    ]).then((data) => {
       console.log('ZAF Fetch Result:', JSON.stringify(data, null, 2));
-      console.log('ZAF Ticket Type:', data.ticket.type);
       setTicket({
         ...data.ticket,
         custom_fields: {
-          [INTERNAL_NOTES_FIELD_ID]: data[`ticket.customField:custom_field_${INTERNAL_NOTES_FIELD_ID}`]
+          [INTERNAL_NOTES_FIELD_ID]: data[`ticket.customField:custom_field_${INTERNAL_NOTES_FIELD_ID}`],
+          [KNOWLEDGE_GAP_FIELD_ID]: data[`ticket.customField:custom_field_${KNOWLEDGE_GAP_FIELD_ID}`]
         }
       });
     });
 
-
     // Fetch tasks if type is task (mock implementation for now)
-    // In real app, use client.request('/api/v2/custom_objects/...')
   }, []);
+
   // State for data consistency
   const [lastUpdatedAt, setLastUpdatedAt] = useState(null);
   const [isStale, setIsStale] = useState(false);
@@ -116,7 +122,24 @@ const TicketOverview = () => {
   const refreshData = () => {
     if (!client || !ticket.id) return;
     client.request(`/api/v2/tickets/${ticket.id}.json`).then(data => {
-      setTicket(prev => ({ ...prev, ...data.ticket })); // Merge standard fields
+      setTicket(prev => ({
+        ...prev,
+        ...data.ticket,
+        // Ensure custom fields from refresh are merged correctly if key names differ
+        // Note: data.ticket.custom_fields is an array [{id, value}, ...].
+        // We need to map it to our internal object structure
+      }));
+
+      // Update custom fields map from the array response
+      if (data.ticket.custom_fields) {
+        const cfMap = {};
+        data.ticket.custom_fields.forEach(f => { cfMap[f.id] = f.value; });
+        setTicket(prev => ({
+          ...prev,
+          custom_fields: { ...prev.custom_fields, ...cfMap }
+        }));
+      }
+
       setLastUpdatedAt(data.ticket.updated_at);
       setIsStale(false);
       client.invoke('notify', 'Data refreshed from server', 'notice');
@@ -129,6 +152,11 @@ const TicketOverview = () => {
       if (field.startsWith('custom_field_')) {
         const id = field.replace('custom_field_', '');
         return { ...prev, custom_fields: { ...prev.custom_fields, [id]: value } };
+      }
+      // Special case handling for 'type' change
+      if (field === 'type') {
+        // If generic type changes, we might want to clear related sub-fields
+        // But for now, we leave them (preserving state if user switches back)
       }
       return { ...prev, [field]: value };
     });
@@ -153,7 +181,6 @@ const TicketOverview = () => {
         });
       } else {
         // Handle standard fields (subject, type, etc.)
-        // API requires null to clear explicit fields
         const value = pendingChanges[key];
         ticketUpdateDesc.ticket[key] = (value === '') ? null : value;
       }
@@ -177,7 +204,6 @@ const TicketOverview = () => {
       console.log('API Update Success:', response);
 
       // Sync our lastUpdatedAt with the new one from server
-      // This prevents our own save from triggering the "stale" warning
       setLastUpdatedAt(response.ticket.updated_at);
       setIsStale(false);
 
@@ -211,13 +237,16 @@ const TicketOverview = () => {
   };
 
   const discardChanges = () => {
-    // Reload ticket data to revert
     refreshData();
     setPendingChanges({});
     setIsEditingNotes(false);
   };
 
   const internalNotes = ticket.custom_fields?.[INTERNAL_NOTES_FIELD_ID] || '';
+  const currentType = pendingChanges.type !== undefined ? pendingChanges.type : (ticket.type || '');
+  const knowledgeGapValue = pendingChanges[`custom_field_${KNOWLEDGE_GAP_FIELD_ID}`] !== undefined
+    ? pendingChanges[`custom_field_${KNOWLEDGE_GAP_FIELD_ID}`]
+    : (ticket.custom_fields?.[KNOWLEDGE_GAP_FIELD_ID] || '');
 
   return (
     <Container>
@@ -273,9 +302,8 @@ const TicketOverview = () => {
               <Field className="mt-4">
                 <Label>Type</Label>
                 <Select
-                  value={pendingChanges.type !== undefined ? pendingChanges.type : (ticket.type || '')}
+                  value={currentType}
                   onChange={(e) => {
-                    console.log('Select changed to:', e.target.value);
                     handleFieldChange('type', e.target.value);
                   }}
                 >
@@ -287,10 +315,17 @@ const TicketOverview = () => {
                 </Select>
               </Field>
 
+              {currentType === 'question' && (
+                <KnowledgeGapSelector
+                  client={client}
+                  value={knowledgeGapValue}
+                  onChange={(val) => handleFieldChange(`custom_field_${KNOWLEDGE_GAP_FIELD_ID}`, val)}
+                />
+              )}
+
               {ticket.type === 'task' && (
                 <Field className="mt-4">
                   <Label>Task</Label>
-                  {/* Task dropdown implementation would go here */}
                   <Input placeholder="Select task..." />
                 </Field>
               )}
