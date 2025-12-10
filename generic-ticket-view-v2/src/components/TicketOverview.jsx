@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Grid, Row, Col } from '@zendeskgarden/react-grid';
 import { Field, Label, Input, Textarea, Select } from '@zendeskgarden/react-forms';
-import { Field as DropdownField, Label as DropdownLabel } from '@zendeskgarden/react-dropdowns';
+import { Combobox, Option, Field as DropdownField, Label as DropdownLabel } from '@zendeskgarden/react-dropdowns';
 import { Button } from '@zendeskgarden/react-buttons';
 import { Tag } from '@zendeskgarden/react-tags';
 import { Accordion } from '@zendeskgarden/react-accordions';
@@ -12,7 +12,19 @@ import KnowledgeGapSelector from './KnowledgeGapSelector';
 const INTERNAL_NOTES_FIELD_ID = 37453127421979;
 const TASK_FIELD_ID = 38720689571483;
 const KNOWLEDGE_GAP_FIELD_ID = 38622750189851;
+const FORM_ID_QUESTION = 40371394736027;
 const FORM_ID_TASK = 40371906157979;
+const FORM_ID_INCIDENT = 40370664972315;
+const FORM_ID_PROBLEM = 39970440237979;
+
+const TICKET_TYPES = ['question', 'incident', 'problem', 'task'];
+
+const TICKET_FORM_MAPPING = {
+  question: FORM_ID_QUESTION,
+  task: FORM_ID_TASK,
+  incident: FORM_ID_INCIDENT,
+  problem: FORM_ID_PROBLEM
+};
 
 const Container = styled.div`
   padding: 20px;
@@ -149,16 +161,25 @@ const TicketOverview = () => {
   const handleFieldChange = (field, value) => {
     setPendingChanges(prev => ({ ...prev, [field]: value }));
     setTicket(prev => {
+      let updatedTicket = { ...prev };
+
       if (field.startsWith('custom_field_')) {
         const id = field.replace('custom_field_', '');
-        return { ...prev, custom_fields: { ...prev.custom_fields, [id]: value } };
+        updatedTicket = { ...updatedTicket, custom_fields: { ...updatedTicket.custom_fields, [id]: value } };
+      } else {
+        updatedTicket = { ...updatedTicket, [field]: value };
       }
+
       // Special case handling for 'type' change
       if (field === 'type') {
-        // If generic type changes, we might want to clear related sub-fields
-        // But for now, we leave them (preserving state if user switches back)
+        const newFormId = TICKET_FORM_MAPPING[value];
+        if (newFormId) {
+          setPendingChanges(current => ({ ...current, ticket_form_id: newFormId }));
+          updatedTicket.ticket_form_id = newFormId;
+          console.log(`Switched to form ${newFormId} for type ${value}`);
+        }
       }
-      return { ...prev, [field]: value };
+      return updatedTicket;
     });
   };
 
@@ -299,30 +320,52 @@ const TicketOverview = () => {
                 <Label>Requester</Label>
                 <Input value={ticket.requester?.name || ''} readOnly />
               </Field>
-              <Field className="mt-4">
-                <Label>Type</Label>
-                <Select
-                  value={currentType}
-                  onChange={(e) => {
-                    handleFieldChange('type', e.target.value);
+              <DropdownField className="mt-4">
+                <DropdownLabel>Type</DropdownLabel>
+                <Combobox
+                  onChange={({ selectionValue }) => {
+                    if (selectionValue) {
+                      handleFieldChange('type', selectionValue);
+                    }
                   }}
+                  isEditable={false}
                 >
-                  <option value="">Select type</option>
-                  <option value="question">Question</option>
-                  <option value="incident">Incident</option>
-                  <option value="problem">Problem</option>
-                  <option value="task">Task</option>
-                </Select>
-              </Field>
+                  {TICKET_TYPES.map(type => (
+                    <Option
+                      key={type}
+                      value={type}
+                      label={type.charAt(0).toUpperCase() + type.slice(1)}
+                      isSelected={currentType === type}
+                    >
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </Option>
+                  ))}
+                </Combobox>
+              </DropdownField>
 
-              {currentType === 'question' && (
+              {ticket.type === 'question' && (
                 <KnowledgeGapSelector
                   client={client}
-                  value={knowledgeGapValue}
-                  onChange={(val) => handleFieldChange(`custom_field_${KNOWLEDGE_GAP_FIELD_ID}`, val)}
+                  value={ticket[`custom_field_${KNOWLEDGE_GAP_FIELD_ID}`]}
+                  onChange={(val) => handleFieldChange(KNOWLEDGE_GAP_FIELD_ID, val)}
+                  onRecordSelect={(record) => {
+                    if (record && record.custom_object_fields) {
+                      const { kg_user_type, knowledge_gap_notes } = record.custom_object_fields;
+
+                      // Map User Type (39187459300251) - Multiselect
+                      if (kg_user_type) {
+                        handleFieldChange("custom_field_39187459300251", [kg_user_type]);
+                      }
+
+                      // Map Notes (37453127421979) - Textarea/Internal Notes
+                      if (knowledge_gap_notes) {
+                        handleFieldChange("custom_field_37453127421979", knowledge_gap_notes);
+                      }
+                    }
+                  }}
+                  disabled={isStale}
                 />
               )}
-
               {ticket.type === 'task' && (
                 <Field className="mt-4">
                   <Label>Task</Label>

@@ -14,7 +14,7 @@ const StyledOption = styled(Option)`
   }
 `;
 
-const KnowledgeGapSelector = ({ client, value, onChange, disabled }) => {
+const KnowledgeGapSelector = ({ client, value, onChange, onRecordSelect, disabled }) => {
   const [records, setRecords] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -55,14 +55,24 @@ const KnowledgeGapSelector = ({ client, value, onChange, disabled }) => {
     }
 
     if (selectionValue !== undefined) {
-      // selectionValue is the record ID because option value={record.id}
-      // If selectionValue is null (cleared), handle that too
-      onChange(selectionValue);
+      // selectionValue is now the Record Object (or null)
+      if (selectionValue) {
+        onChange(selectionValue.id); // Parent expects ID
+
+        if (onRecordSelect) {
+          onRecordSelect(selectionValue);
+        }
+      } else {
+        onChange(null);
+        if (onRecordSelect) {
+          onRecordSelect(null);
+        }
+      }
     }
   };
 
   return (
-    <div style={{ marginBottom: '16px' }}>
+    <div style={{ marginBottom: '16px', marginTop: '4px' }}>
       <style>{`
         [data-garden-id="dropdowns.combobox.listbox"] {
           min-width: 600px !important;
@@ -85,7 +95,7 @@ const KnowledgeGapSelector = ({ client, value, onChange, disabled }) => {
             <Option isDisabled value="no-matches" label="No matches found">No matches found</Option>
           ) : (
             filteredRecords.map((record) => (
-              <StyledOption key={record.id} value={record.id} label={record.name}>
+              <StyledOption key={record.id} value={record} label={record.name}>
                 {record.name}
               </StyledOption>
             ))
