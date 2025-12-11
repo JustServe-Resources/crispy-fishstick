@@ -6,11 +6,13 @@ import { Button } from '@zendeskgarden/react-buttons';
 import { Tag } from '@zendeskgarden/react-tags';
 import MarkdownRenderer from './MarkdownRenderer';
 import KnowledgeGapSelector from './KnowledgeGapSelector';
+import TaskSelector from './TaskSelector';
 import { useTicketLogic } from '../hooks/useTicketLogic';
 import { Container, Header, NotesSection, Sidebar } from './TicketOverview.styles';
 import {
   INTERNAL_NOTES_FIELD_ID,
   KNOWLEDGE_GAP_FIELD_ID,
+  TASK_FIELD_ID,
   TICKET_TYPES
 } from '../utils/constants';
 
@@ -136,10 +138,25 @@ const TicketOverview = () => {
                 />
               )}
               {currentType === 'task' && (
-                <Field className="mt-4">
-                  <Field.Label>Task</Field.Label>
-                  <Input placeholder="Select task..." />
-                </Field>
+                <TaskSelector
+                  client={client}
+                  value={pendingChanges[`custom_field_${TASK_FIELD_ID}`] !== undefined
+                    ? pendingChanges[`custom_field_${TASK_FIELD_ID}`]
+                    : (ticket.custom_fields?.[TASK_FIELD_ID] || '')
+                  }
+                  onChange={(val) => handleFieldChange(`custom_field_${TASK_FIELD_ID}`, val)}
+                  onRecordSelect={(record) => {
+                    // Auto-fill logic for Task if needed
+                    // Example: if task has user_type, sync it to ticket field
+                    if (record && record.custom_object_fields) {
+                      const { user_type: userType } = record.custom_object_fields;
+                      if (userType) {
+                        handleFieldChange("custom_field_44259900026779", userType);
+                      }
+                    }
+                  }}
+                  disabled={isStale}
+                />
               )}
 
               <Field className="mt-4">

@@ -22,3 +22,6 @@ export const SECTION_FIELD_ID = 44256469941787;
 
 // Target Audience Constants
 export const TARGET_AUDIENCE_KEY = 'target_audience';
+
+// Task Object Constants
+export const TASK_FIELD_ID = 38720689571483;
