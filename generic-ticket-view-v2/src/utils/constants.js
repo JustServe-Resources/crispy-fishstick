@@ -6,7 +6,7 @@ export const FORM_ID_TASK = 40371906157979;
 export const FORM_ID_INCIDENT = 40370664972315;
 export const FORM_ID_PROBLEM = 39970440237979;
 
-export const TICKET_TYPES = ['question', 'incident', 'problem', 'task'];
+export const TICKET_TYPES = ['question', 'incident', 'task'];
 
 export const TICKET_FORM_MAPPING = {
   question: FORM_ID_QUESTION,
@@ -25,3 +25,8 @@ export const TARGET_AUDIENCE_KEY = 'target_audience';
 
 // Task Object Constants
 export const TASK_FIELD_ID = 38720689571483;
+
+// Problem Creation Trigger Fields (for ease of reference or if needed elsewhere)
+export const PROBLEM_STEPS_FIELD_ID = 30574241522075;
+export const PROBLEM_EXPECTED_FIELD_ID = 30572845583899;
+export const PROBLEM_ACTUAL_FIELD_ID = 30573553563675;

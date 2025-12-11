@@ -7,12 +7,16 @@ import { Tag } from '@zendeskgarden/react-tags';
 import MarkdownRenderer from './MarkdownRenderer';
 import KnowledgeGapSelector from './KnowledgeGapSelector';
 import TaskSelector from './TaskSelector';
+import ProblemSelector from './ProblemSelector';
 import { useTicketLogic } from '../hooks/useTicketLogic';
 import { Container, Header, NotesSection, Sidebar } from './TicketOverview.styles';
 import {
   INTERNAL_NOTES_FIELD_ID,
   KNOWLEDGE_GAP_FIELD_ID,
   TASK_FIELD_ID,
+  PROBLEM_STEPS_FIELD_ID,
+  PROBLEM_EXPECTED_FIELD_ID,
+  PROBLEM_ACTUAL_FIELD_ID,
   TICKET_TYPES
 } from '../utils/constants';
 
@@ -32,6 +36,58 @@ const TicketOverview = () => {
   const internalNotes = ticket.custom_fields?.[INTERNAL_NOTES_FIELD_ID] || '';
   const currentType = pendingChanges.type !== undefined ? pendingChanges.type : (ticket.type || '');
 
+  // Problem View (Full Width, Specialized)
+  if (currentType === 'problem') {
+    const steps = ticket.custom_fields?.[PROBLEM_STEPS_FIELD_ID] || '';
+    const expected = ticket.custom_fields?.[PROBLEM_EXPECTED_FIELD_ID] || '';
+    const actual = ticket.custom_fields?.[PROBLEM_ACTUAL_FIELD_ID] || '';
+
+    return (
+      <Container>
+        <Header>
+          <Input
+            value={pendingChanges.subject !== undefined ? pendingChanges.subject : (ticket.subject || '')}
+            onChange={e => handleFieldChange('subject', e.target.value)}
+            isCompact
+          />
+        </Header>
+        <NotesSection>
+          <h3>Problem Details</h3>
+          <div style={{ marginBottom: '20px' }}>
+            <strong>Steps to Produce Behavior:</strong>
+            <MarkdownRenderer content={steps} />
+          </div>
+          <div style={{ marginBottom: '20px' }}>
+            <strong>Expected Behavior:</strong>
+            <MarkdownRenderer content={expected} />
+          </div>
+          <div style={{ marginBottom: '20px' }}>
+            <strong>Actual Behavior:</strong>
+            <MarkdownRenderer content={actual} />
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', marginTop: '30px' }}>
+            <Field.Label>Internal Notes</Field.Label>
+            <Button size="small" isBasic onClick={() => setIsEditingNotes(!isEditingNotes)}>
+              {isEditingNotes ? 'Preview' : 'Edit'}
+            </Button>
+          </div>
+
+          {isEditingNotes ? (
+            <Textarea
+              minRows={5}
+              value={pendingChanges[`custom_field_${INTERNAL_NOTES_FIELD_ID}`] !== undefined ? pendingChanges[`custom_field_${INTERNAL_NOTES_FIELD_ID}`] : internalNotes}
+              onChange={e => handleFieldChange(`custom_field_${INTERNAL_NOTES_FIELD_ID}`, e.target.value)}
+            />
+          ) : (
+            <MarkdownRenderer content={pendingChanges[`custom_field_${INTERNAL_NOTES_FIELD_ID}`] !== undefined ? pendingChanges[`custom_field_${INTERNAL_NOTES_FIELD_ID}`] : internalNotes} />
+          )}
+        </NotesSection>
+      </Container>
+    );
+  }
+
+  // Standard View (Split Layout)
   return (
     <Container>
       {isStale && (
@@ -147,7 +203,6 @@ const TicketOverview = () => {
                   onChange={(val) => handleFieldChange(`custom_field_${TASK_FIELD_ID}`, val)}
                   onRecordSelect={(record) => {
                     // Auto-fill logic for Task if needed
-                    // Example: if task has user_type, sync it to ticket field
                     if (record && record.custom_object_fields) {
                       const { user_type: userType } = record.custom_object_fields;
                       if (userType) {
@@ -155,6 +210,18 @@ const TicketOverview = () => {
                       }
                     }
                   }}
+                  disabled={isStale}
+                />
+              )}
+
+              {currentType === 'incident' && (
+                <ProblemSelector
+                  client={client}
+                  value={pendingChanges.problem_id !== undefined
+                    ? pendingChanges.problem_id
+                    : (ticket.problem_id || '')
+                  }
+                  onChange={(val) => handleFieldChange('problem_id', val)}
                   disabled={isStale}
                 />
               )}
@@ -174,8 +241,6 @@ const TicketOverview = () => {
           </Grid.Col>
         </Grid.Row>
       </Grid>
-
-
     </Container>
   );
 };
