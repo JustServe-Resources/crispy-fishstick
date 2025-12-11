@@ -23,13 +23,14 @@
     "@zendeskgarden/react-grid": "^9.12.3",
     "@zendeskgarden/react-modals": "^9.12.3",
     "@zendeskgarden/react-tags": "^9.12.3",
-    "@zendeskgarden/react-theming": "^9.12.3",
+    "@zendeskgarden/react-theming": "^9.12.4",
     "@zendeskgarden/react-typography": "^9.12.3",
     "lodash.debounce": "^4.0.8",
     "marked": "^17.0.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "styled-components": "^6.1.19"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "styled-components": "^6.1.19",
+    "use-resize-observer": "^9.1.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.1.0",

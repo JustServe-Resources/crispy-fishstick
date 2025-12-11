@@ -109,20 +109,22 @@ const TicketOverview = () => {
         />
       </Header>
 
-      <div ref={ref} style={{ flex: 1, height: '100%', minHeight: 0 }}>
+      <div ref={ref} style={{ flex: 1, minHeight: 0 }}>
         <PaneProvider
           totalPanesHeight={height}
           totalPanesWidth={width}
           defaultColumnValues={{
-            'pane-layout': 1 // layoutKey 
+            'pane-1': 1,
+            'pane-2': 1
           }}
         >
           {({ getGridTemplateColumns }) => (
             <div
               style={{
+                width,
+                height: '100%',
                 display: 'grid',
-                gridTemplateColumns: getGridTemplateColumns(),
-                height: '100%'
+                gridTemplateColumns: getGridTemplateColumns()
               }}
             >
               <Pane>
@@ -152,9 +154,8 @@ const TicketOverview = () => {
 
                   <a href="#" onClick={(e) => { e.preventDefault(); /* Logic to open conversation */ }}>View Conversation</a>
                 </MainPaneContent>
+                <Pane.Splitter layoutKey="pane-1" min={0.5} max={1.5} aria-label="Resize pane" />
               </Pane>
-
-              <Pane.Splitter layoutKey="pane-layout" min={0.2} max={0.8} />
 
               <Pane>
                 <SidebarPaneContent>

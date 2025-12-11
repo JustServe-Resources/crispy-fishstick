@@ -5,6 +5,8 @@ export const Container = styled.div`
   padding: 20px;
   height: 100vh;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Header = styled.h1`
