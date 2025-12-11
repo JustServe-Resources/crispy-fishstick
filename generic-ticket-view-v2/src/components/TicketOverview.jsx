@@ -9,7 +9,7 @@ import KnowledgeGapSelector from './KnowledgeGapSelector';
 import TaskSelector from './TaskSelector';
 import ProblemSelector from './ProblemSelector';
 import { useTicketLogic } from '../hooks/useTicketLogic';
-import { Container, Header, NotesSection, Sidebar } from './TicketOverview.styles';
+import { Container, Header, NotesSection, Sidebar, FullWidthGrid } from './TicketOverview.styles';
 import {
   INTERNAL_NOTES_FIELD_ID,
   KNOWLEDGE_GAP_FIELD_ID,
@@ -104,7 +104,7 @@ const TicketOverview = () => {
         />
       </Header>
 
-      <Grid>
+      <FullWidthGrid>
         <Grid.Row>
           <Grid.Col size={9}>
             <NotesSection>
@@ -240,7 +240,7 @@ const TicketOverview = () => {
             </Sidebar>
           </Grid.Col>
         </Grid.Row>
-      </Grid>
+      </FullWidthGrid>
     </Container>
   );
 };

@@ -1,7 +1,16 @@
 import styled from 'styled-components';
+import { Grid } from '@zendeskgarden/react-grid';
 
 export const Container = styled.div`
   padding: 20px;
+  height: 100%;
+`;
+/* Added height 100% just in case */
+
+export const FullWidthGrid = styled(Grid)`
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 `;
 
 export const Header = styled.h1`
@@ -15,6 +24,7 @@ export const Header = styled.h1`
     &:hover, &:focus {
       border-color: #ddd;
     }
+    width: 100%;
   }
 `;
 
@@ -28,4 +38,6 @@ export const NotesSection = styled.div`
 export const Sidebar = styled.div`
   border-left: 1px solid #eee;
   padding-left: 20px;
+  height: 100%;
 `;
+

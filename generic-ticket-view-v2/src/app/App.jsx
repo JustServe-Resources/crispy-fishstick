@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import '../assets/root-styles.css'
 import { useLocation } from './hooks/useClient'
 import { TranslationProvider } from './contexts/TranslationProvider'
 import { DEFAULT_THEME, ThemeProvider } from '@zendeskgarden/react-theming'
