@@ -152,7 +152,7 @@ const TicketOverview = () => {
                     )}
                   </NotesSection>
 
-                  <a href="#" onClick={(e) => { e.preventDefault(); /* Logic to open conversation */ }}>View Conversation</a>
+
                 </MainPaneContent>
                 <Pane.Splitter layoutKey="pane-1" min={0.5} max={1.5} aria-label="Resize pane" />
               </Pane>
