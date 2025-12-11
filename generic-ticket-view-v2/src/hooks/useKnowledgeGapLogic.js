@@ -36,7 +36,6 @@ export const useKnowledgeGapLogic = (client, value, onChange, onRecordSelect) =>
   const [sectionFieldKey, setSectionFieldKey] = useState(null);
   const [sectionOptions, setSectionOptions] = useState([]);
   const [selectedSection, setSelectedSection] = useState(null);
-  const [sectionInputValue, setSectionInputValue] = useState('');
 
   const loadRecords = async () => {
     if (!client) return;
@@ -210,8 +209,6 @@ export const useKnowledgeGapLogic = (client, value, onChange, onRecordSelect) =>
     sectionOptions,
     selectedSection,
     setSelectedSection,
-    sectionInputValue,
-    setSectionInputValue,
     handleCreateRecord,
     selectedRecord,
     debouncedHandleSearch

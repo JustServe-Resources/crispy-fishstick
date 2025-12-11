@@ -18,8 +18,6 @@ const KnowledgeGapSelector = ({ client, value, onChange, onRecordSelect, disable
     sectionOptions,
     selectedSection,
     setSelectedSection,
-    sectionInputValue,
-    setSectionInputValue,
     newQuestion,
     setNewQuestion,
     newNotes,
@@ -132,26 +130,15 @@ const KnowledgeGapSelector = ({ client, value, onChange, onRecordSelect, disable
                 <Field>
                   <Field.Label>Category</Field.Label>
                   <Combobox
-                    isAutocomplete
+                    isEditable={false}
                     onChange={({ selectionValue }) => setSelectedSection(selectionValue)}
-                    onInputValueChange={({ inputValue }) => setSectionInputValue(inputValue)}
-
                     selectedItem={selectedSection}
-                    inputValue={sectionInputValue}
-                    itemToString={(item) => {
-                      if (!item) return '';
-                      const found = sectionOptions.find(o => o.id === item);
-                      return found ? found.name : item;
-                    }}
-
                   >
-                    {sectionOptions
-                      .filter(s => s.name.toLowerCase().includes(sectionInputValue.toLowerCase()))
-                      .map((opt) => (
-                        <Option key={opt.id} value={opt.id} label={opt.name}>
-                          {opt.name}
-                        </Option>
-                      ))}
+                    {sectionOptions.map((opt) => (
+                      <Option key={opt.id} value={opt.id} label={opt.name}>
+                        {opt.name}
+                      </Option>
+                    ))}
                   </Combobox>
                 </Field>
               </div>
