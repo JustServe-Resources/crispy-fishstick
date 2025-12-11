@@ -8,7 +8,7 @@ function SetTicketType(editTypeValue, setEditTypeValue){
     const [isLoading, setIsLoading] = useState(false);
 
     function fetchTasks(searchTerm){
-        window.zafClient.request({
+        const response = window.zafClient.request({
             url: '/api/v2/custom_objects/task/records/search',
             type: 'POST',
             data: {
@@ -17,6 +17,7 @@ function SetTicketType(editTypeValue, setEditTypeValue){
                 sort_order: 'desc'
             }
         })
+        return response;
     }
 
     useEffect(() => {
@@ -48,7 +49,7 @@ function SetTicketType(editTypeValue, setEditTypeValue){
             {/* then with those results we need to map the top 10 results to the */}
             {
                 options.map((option)=>{
-                    <Option key={option.id} value={option.id} label={option.name} />
+                    return <Option key={option.id} value={option.id} label={option.name} />;
                 })
             }
             </Combobox>
