@@ -25,7 +25,7 @@ const KnowledgeGapSelector = ({ client, value, onChange, onRecordSelect, disable
     isCreating,
     handleCreateRecord,
     userTypeOptions,
-    debouncedHandleSearch
+    handleSearch
   } = useKnowledgeGapLogic(client, value, onChange, onRecordSelect);
 
 
@@ -51,7 +51,7 @@ const KnowledgeGapSelector = ({ client, value, onChange, onRecordSelect, disable
             // Handle Input Change and Filtering
             if (changes.inputValue !== undefined) {
               setInputValue(changes.inputValue);
-              debouncedHandleSearch(changes);
+              handleSearch(changes);
             }
 
             // Handle Selection

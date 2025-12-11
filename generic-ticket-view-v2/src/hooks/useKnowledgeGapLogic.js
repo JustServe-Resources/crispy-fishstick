@@ -170,7 +170,7 @@ export const useKnowledgeGapLogic = (client, value, onChange, onRecordSelect) =>
     }
   }, [selectedRecord]);
 
-  // Debounced search for the main Knowledge Gap dropdown
+  // Direct search for the main Knowledge Gap dropdown (Local filtering doesn't need debounce)
   const handleSearch = useCallback(({ inputValue }) => {
     if (inputValue !== undefined) {
       if (inputValue === '') {
@@ -181,14 +181,6 @@ export const useKnowledgeGapLogic = (client, value, onChange, onRecordSelect) =>
       }
     }
   }, [records]);
-
-  const debouncedHandleSearch = useMemo(() => debounce(handleSearch, 300), [handleSearch]);
-
-  useEffect(() => {
-    return () => {
-      debouncedHandleSearch.cancel();
-    };
-  }, [debouncedHandleSearch]);
 
   return {
     records,
@@ -211,6 +203,6 @@ export const useKnowledgeGapLogic = (client, value, onChange, onRecordSelect) =>
     setSelectedSection,
     handleCreateRecord,
     selectedRecord,
-    debouncedHandleSearch
+    handleSearch
   };
 };
