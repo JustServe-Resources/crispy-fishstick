@@ -37,6 +37,11 @@ module.exports = {
         { from: 'src/assets/mock.js', to: path.join(__dirname, 'dist/assets') },
       ],
     }),
+    new CopyPlugin({
+      patterns: [
+        { from: 'src/manifest.json', to: path.join(__dirname, 'dist/') },
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: './src/assets/index.html',
       filename: './index.html'
