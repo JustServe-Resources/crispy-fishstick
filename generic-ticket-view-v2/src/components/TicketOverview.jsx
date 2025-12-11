@@ -11,7 +11,7 @@ import KnowledgeGapSelector from './KnowledgeGapSelector';
 import TaskSelector from './TaskSelector';
 import ProblemSelector from './ProblemSelector';
 import { useTicketLogic } from '../hooks/useTicketLogic';
-import { Container, Header, NotesSection, MainPaneContent, SidebarPaneContent } from './TicketOverview.styles';
+import { Container, NotesSection, MainPaneContent, SidebarPaneContent } from './TicketOverview.styles';
 import {
   INTERNAL_NOTES_FIELD_ID,
   KNOWLEDGE_GAP_FIELD_ID,
@@ -49,13 +49,7 @@ const TicketOverview = () => {
 
     return (
       <Container>
-        <Header>
-          <Input
-            value={pendingChanges.subject !== undefined ? pendingChanges.subject : (ticket.subject || '')}
-            onChange={e => handleFieldChange('subject', e.target.value)}
-            isCompact
-          />
-        </Header>
+
         <NotesSection>
           <h3>Problem Details</h3>
           <div style={{ marginBottom: '20px' }}>
@@ -101,13 +95,7 @@ const TicketOverview = () => {
           <Button size="small" onClick={refreshData}>Reload</Button>
         </div>
       )}
-      <Header>
-        <Input
-          value={pendingChanges.subject !== undefined ? pendingChanges.subject : (ticket.subject || '')}
-          onChange={e => handleFieldChange('subject', e.target.value)}
-          isCompact
-        />
-      </Header>
+
 
       <div ref={ref} style={{ flex: 1, minHeight: 0 }}>
         <PaneProvider
