@@ -6,6 +6,7 @@ import { Accordion } from '@zendeskgarden/react-accordions';
 import { Combobox, Option, Field as DropdownField, Menu, Item, ItemGroup } from '@zendeskgarden/react-dropdowns';
 import { Button } from '@zendeskgarden/react-buttons';
 import { Tag } from '@zendeskgarden/react-tags';
+import { Notification } from '@zendeskgarden/react-notifications';
 import MarkdownRenderer from './MarkdownRenderer';
 import KnowledgeGapSelector from './KnowledgeGapSelector';
 import TaskSelector from './TaskSelector';
@@ -41,6 +42,7 @@ const TicketOverview = () => {
   const { ref, width = 800, height = 600 } = useResizeObserver();
   const [quickTasks, setQuickTasks] = useState([]);
   const [expandedSections, setExpandedSections] = useState([]);
+  const [notification, setNotification] = useState({ type: '', title: '', message: '', visible: false });
 
   useEffect(() => {
     if (!client) return;
@@ -121,6 +123,15 @@ const TicketOverview = () => {
   // Standard View (Split Layout with Panes)
   return (
     <Container>
+      {notification.visible && (
+        <div style={{ marginBottom: '15px' }}>
+          <Notification type={notification.type}>
+            <Notification.Title>{notification.title}</Notification.Title>
+            {notification.message}
+            <Notification.Close onClick={() => setNotification({ ...notification, visible: false })} aria-label="Close Notification" />
+          </Notification>
+        </div>
+      )}
       {isStale && (
         <div style={{ background: '#fff4e5', color: '#663c00', padding: '10px', marginBottom: '15px', border: '1px solid #ffcc00', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span><strong>Update Detected:</strong> The ticket has been updated externally.</span>
@@ -182,6 +193,45 @@ const TicketOverview = () => {
                   <Field>
                     <Field.Label>Requester</Field.Label>
                     <Input value={ticket.requester?.name || ''} readOnly />
+                    {ticket.requester?.id === 18885940524699 && ticket.email_cc_ids?.length === 1 && (
+                      <Button
+                        isBasic
+                        size="small"
+                        onClick={() => {
+                          const newRequesterId = ticket.email_cc_ids[0];
+                          client.request({
+                            url: `/api/v2/tickets/${ticket.id}.json`,
+                            type: 'PUT',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                              ticket: {
+                                requester_id: newRequesterId,
+                                email_cc_ids: []
+                              }
+                            })
+                          }).then(() => {
+                            setNotification({
+                              type: 'success',
+                              title: 'Success',
+                              message: 'Requester updated successfully!',
+                              visible: true
+                            });
+                            refreshData();
+                          }).catch(err => {
+                            console.error('Failed to swap requester', err);
+                            setNotification({
+                              type: 'error',
+                              title: 'Error',
+                              message: 'Failed to update requester.',
+                              visible: true
+                            });
+                          });
+                        }}
+                        style={{ marginTop: '8px', width: '100%' }}
+                      >
+                        Make CC the Requester
+                      </Button>
+                    )}
                   </Field>
                   <DropdownField className="mt-4">
                     <DropdownField.Label>Type</DropdownField.Label>
