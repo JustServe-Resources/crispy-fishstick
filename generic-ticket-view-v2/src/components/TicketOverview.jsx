@@ -1,9 +1,9 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { PaneProvider, Pane } from '@zendeskgarden/react-grid';
 import useResizeObserver from 'use-resize-observer';
-import { Grid } from '@zendeskgarden/react-grid';
 import { Field, Input, Textarea } from '@zendeskgarden/react-forms';
-import { Combobox, Option, Field as DropdownField } from '@zendeskgarden/react-dropdowns';
+import { Accordion } from '@zendeskgarden/react-accordions';
+import { Combobox, Option, Field as DropdownField, Menu, Item, ItemGroup } from '@zendeskgarden/react-dropdowns';
 import { Button } from '@zendeskgarden/react-buttons';
 import { Tag } from '@zendeskgarden/react-tags';
 import MarkdownRenderer from './MarkdownRenderer';
@@ -12,6 +12,7 @@ import TaskSelector from './TaskSelector';
 import ProblemSelector from './ProblemSelector';
 import { useTicketLogic } from '../hooks/useTicketLogic';
 import { Container, NotesSection, MainPaneContent, SidebarPaneContent } from './TicketOverview.styles';
+import { fetchCustomObjectRecord } from '../utils/zendesk';
 import {
   INTERNAL_NOTES_FIELD_ID,
   KNOWLEDGE_GAP_FIELD_ID,
@@ -21,6 +22,8 @@ import {
   PROBLEM_ACTUAL_FIELD_ID,
   TICKET_TYPES
 } from '../utils/constants';
+
+const QUICK_TASK_IDS = ['01K2YV3KRD5M9V29SV2QSC5MF7', '01K0SCJKA6B9YZTFPPZZYYH7NR', '01K1BX2H6J2ADM1GDB4XDAYY6P'];
 
 const TicketOverview = () => {
   const {
@@ -36,6 +39,35 @@ const TicketOverview = () => {
   } = useTicketLogic();
 
   const { ref, width = 800, height = 600 } = useResizeObserver();
+  const [quickTasks, setQuickTasks] = useState([]);
+  const [expandedSections, setExpandedSections] = useState([]);
+
+  useEffect(() => {
+    if (!client) return;
+    const loadQuickTasks = async () => {
+      const promises = QUICK_TASK_IDS.map(id => fetchCustomObjectRecord(client, 'task', id).catch(e => {
+        console.warn(`Failed to fetch quick task ${id}`, e);
+        return null;
+      }));
+      const results = await Promise.all(promises);
+      setQuickTasks(results.filter(r => r));
+    };
+    loadQuickTasks();
+  }, [client]);
+
+  const handleQuickMenuChange = (changes) => {
+    if (changes.selectedItem) {
+      const task = quickTasks.find(t => t.id === changes.selectedItem.value);
+      if (task) {
+        handleFieldChange('type', 'task');
+        handleFieldChange(`custom_field_${TASK_FIELD_ID}`, task.id);
+
+        if (task.custom_object_fields?.user_type) {
+          handleFieldChange("custom_field_44259900026779", task.custom_object_fields.user_type);
+        }
+      }
+    }
+  };
 
   const internalNotes = ticket.custom_fields?.[INTERNAL_NOTES_FIELD_ID] || '';
   const currentType = pendingChanges.type !== undefined ? pendingChanges.type : (ticket.type || '');
@@ -248,6 +280,47 @@ const TicketOverview = () => {
                     <div>
                       {ticket.tags?.map(tag => <Tag key={tag}>{tag}</Tag>)}
                     </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <Accordion
+                      level={4}
+                      expandedSections={expandedSections}
+                      onChange={(index) => {
+                        if (expandedSections.includes(index)) {
+                          setExpandedSections(expandedSections.filter((i) => i !== index));
+                        } else {
+                          setExpandedSections([...expandedSections, index]);
+                        }
+                      }}
+                    >
+                      <Accordion.Section>
+                        <Accordion.Header>
+                          <Accordion.Label>Common Tickets Quick Select</Accordion.Label>
+                        </Accordion.Header>
+                        <Accordion.Panel>
+                          <Menu
+                            button={(
+                              <Button isBasic size="small" style={{ width: '100%' }}>
+                                Select Common Issue
+                              </Button>
+                            )}
+                            onChange={handleQuickMenuChange}
+                          >
+                            {quickTasks.length > 0 && (
+                              <ItemGroup legend="Common Tasks">
+                                {quickTasks.map(task => (
+                                  <Item key={task.id} value={task.id}>
+                                    {task.name}
+                                    <Item.Meta>Task</Item.Meta>
+                                  </Item>
+                                ))}
+                              </ItemGroup>
+                            )}
+                          </Menu>
+                        </Accordion.Panel>
+                      </Accordion.Section>
+                    </Accordion>
                   </div>
                 </SidebarPaneContent>
               </Pane>
